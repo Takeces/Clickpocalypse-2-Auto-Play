@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Clickpocalypse 2 Autoplay
 // @namespace    Clickpocalypse2
-// @version      1.0
+// @version      1.1
 // @description  Automatically plays Clickpocalypse 2
 // @author       Takeces aka Akerus
 // @match        https://minmaxia.com/c2/
@@ -118,14 +118,15 @@
     function doAvailableUpgrades() {
         for(let btn of document.getElementsByClassName('upgradeButton')) {
             if(btn.id == 'pauseButton') { continue; }
-            if(btn.id.startsWith('characterSkillsContainer') || btn.id.startsWith('pointUpgradesContainer')) { continue; }
+            if(btn.id.includes('characterSkillsContainer') || btn.id.includes('pointUpgradesContainer')) { continue; }
             if(window.getComputedStyle(btn).display === 'none') { continue; }
             if(btn.getElementsByTagName('table').length > 0) {
-                if(btn.getElementsByTagName('tr')[0].innerText.startsWith('\tLevel Up') ||
-                   btn.getElementsByTagName('tr')[0].innerText.startsWith('\tBuy Monster Farm') ||
-                   btn.getElementsByTagName('tr')[0].innerText.startsWith('\tHarvest Rewards') ||
-                   btn.getElementsByTagName('tr')[0].innerText.startsWith('\tCollect Item Sales') ||
-                   btn.getElementsByTagName('tr')[0].innerText.startsWith('\tAttack Castle')) {
+                if(btn.getElementsByTagName('tr')[0].innerText.includes('Level Up') ||
+                   btn.getElementsByTagName('tr')[0].innerText.includes('Buy Monster Farm') ||
+                   btn.getElementsByTagName('tr')[0].innerText.includes('Harvest Rewards') ||
+                   btn.getElementsByTagName('tr')[0].innerText.includes('Collect Item Sales') ||
+                   btn.getElementsByTagName('tr')[0].innerText.includes('Attack Castle') ||
+                   btn.getElementsByTagName('tr')[0].innerText.includes('Retire Monster')) {
                     click(btn);
                     return;
                 }
@@ -140,10 +141,14 @@
                 }
                 if(btn.getElementsByTagName('tr')[0].innerText.startsWith('Unlock Monster')) {
                     if(!activeMonsterLevel ||
-                        btn.getElementsByTagName('tr')[1].innerText === 'Assessment: TOO HARD!' ||
-                        btn.getElementsByTagName('tr')[1].innerText === 'Assessment: Very Tough!' ||
-                        btn.getElementsByTagName('tr')[1].innerText === 'Assessment: Challenging') {
+                        btn.getElementsByTagName('tr')[1].innerText.includes('Assessment: TOO HARD!') ||
+                        btn.getElementsByTagName('tr')[1].innerText.includes('Assessment: Very Tough!') ||
+                        btn.getElementsByTagName('tr')[1].innerText.includes('Assessment: Challenging') ||
+                        btn.getElementsByTagName('tr')[0].innerText.includes('Unlock Monster Level 36')) {
                         continue;
+                    } else {
+                        click(btn);
+                        return;
                     }
                 }
             } else {
